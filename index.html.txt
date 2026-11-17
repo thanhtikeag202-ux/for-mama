@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>မမ အတွက် 💌</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            font-family: 'Pyidaungsu', sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.94);
+            padding: 32px 25px;
+            border-radius: 26px;
+            box-shadow: 0 15px 35px rgba(255, 105, 135, 0.2);
+            text-align: center;
+            width: 85%;
+            max-width: 350px;
+            position: relative;
+        }
+
+        .gif-box {
+            width: 165px;
+            height: 165px;
+            margin: 0 auto 20px;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gif-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            min-height: 55px;
+        }
+
+        button {
+            padding: 12px 26px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        #yesBtn {
+            background-color: #ff4757;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            background-color: #ff6b81;
+            transform: scale(1.05);
+        }
+
+        #noBtn {
+            background-color: #70a1ff;
+            color: white;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="gif-box">
+            <img id="bearGif" src="https://media.tenor.com/eb3B3H2n_c4AAAAi/milk-and-mocha-bear.gif" alt="Cute Bear">
+        </div>
+        
+        <h2 id="questionText">မမ... မောင်လေးကို တကယ် အမြဲတမ်း ချစ်ပေးမှာလားဟင်... 🥺❤️</h2>
+
+        <div class="btn-group">
+            <button id="yesBtn">ချစ်မှာပေါ့ ❤️</button>
+            <button id="noBtn">ဟင့်အင်း 😝</button>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionText = document.getElementById('questionText');
+        const bearGif = document.getElementById('bearGif');
+
+        function sendEmailNotification() {
+            const formData = new FormData();
+            
+            // 👇 Access Key ကို အောက်ပါအတိုင်း ယူနန်္နုတ်သီး (quotation mark) ထဲမှာ ထည့်ရပါမည် 👇
+            formData.append("access_key", "1319e047-6fa5-48a6-b607-f694f510c1f6");
+            
+            formData.append("subject", "🎉 သတင်းကောင်း! မမက ဖြေလိုက်ပါပြီ 🥰");
+            formData.append("message", "မမက Website ထဲမှာ 'ချစ်မှာပေါ့ ❤️' ဆိုတဲ့ ခလုတ်ကို နှိပ်လိုက်ပါပြီခင်ဗျာ!");
+
+            fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  console.log("Email sent successfully", data);
+              })
+              .catch(error => {
+                  console.log("Error", error);
+              });
+        }
+
+        function moveNoButton() {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = `${Math.max(20, x)}px`;
+            noBtn.style.top = `${Math.max(20, y)}px`;
+
+            const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = `${currentSize + 3}px`;
+            yesBtn.style.padding = `${parseFloat(window.getComputedStyle(yesBtn).paddingTop) + 2}px ${parseFloat(window.getComputedStyle(yesBtn).paddingLeft) + 4}px`;
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+        noBtn.addEventListener('click', moveNoButton);
+
+        yesBtn.addEventListener('click', () => {
+            sendEmailNotification();
+
+            questionText.innerHTML = "ရေး... မမကို အရမ်းချစ်တယ်နော်! 🥰💖";
+            bearGif.src = "https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif";
+            noBtn.style.display = 'none';
+            yesBtn.style.fontSize = '18px';
+            yesBtn.style.padding = '12px 35px';
+            yesBtn.innerText = "မမ အချစ်ဆုံး ❤️";
+        });
+    </script>
+
+</body>
+</html>
